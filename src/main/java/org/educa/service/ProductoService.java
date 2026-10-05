@@ -5,13 +5,24 @@ import org.educa.entity.ProductoEntity;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoService {
+    private final ProductoDAO =new
 
+    ProductoDAOImpl();
+
+    /***
+     * (RETOCAR) Reads an XML File using JAXB.
+     *
+     * @param fileXml
+     * @return List<ProductoEntity>
+     * @throws JAXBException
+     */
     public List<ProductoEntity> readFile(String fileXml) throws JAXBException {
-        //TODO: Implementar
-        return null;
+        List<ProductoEntity> listaProductos = new ArrayList<>();
+        return ProductoDAO.getProductos(fileXml);
     }
 
     public void exportSummary(String path, String fileXml) throws JAXBException, IOException {
