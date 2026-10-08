@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoService {
-    private final ProductoDAO =new
 
-    ProductoDAOImpl();
+    private final ProductoDAO productoDAO = new ProductoDAOImpl();
+
 
     /***
      * (RETOCAR) Reads an XML File using JAXB.
@@ -21,9 +21,46 @@ public class ProductoService {
      * @throws JAXBException
      */
     public List<ProductoEntity> readFile(String fileXml) throws JAXBException {
-        List<ProductoEntity> listaProductos = new ArrayList<>();
-        return ProductoDAO.getProductos(fileXml);
+
+        Productos productos = productoDAO.readFile(fileXml);
+
+        List<Producto> listaProductos = productos.getProducto();
+        List<ProductoEntity> resultado = new ArrayList<>();
+
+        for (Producto p : listaProductos) {
+
+            ProductoEntity productoEntity = new ProductoEntity();
+
+            productoEntity.setProducto(p);
+            productoEntity.setPrecioFinal(calcularPrecioFinal(p));
+            productoEntity.setCost(calcularCoste(p));
+            productoEntity.setProfit(calcularBeneficio(p));
+
+
+            resultado.add(productoEntity);
+        }
     }
+
+    private BigDecimal calcularPrecioFinal(Producto producto){
+        BigDecimal precioFinal = producto.getPrecio()
+                .subtract(producto.getPrecio()
+                        .multiply(producto.getDescuento()
+                                .divide(new BigDecimal(100))));
+
+        return precioFinal;
+    }
+
+    private BigDecimal calcularCoste(Producto producto){
+        BigDecimal coste = producto.getCostes().getCostesEnvio().add(producto.getCostes().getCostesAlmacenaje());
+        return coste;
+    }
+
+    private BigDecimal calcularBeneficio(Producto producto){
+        BigDecimal beneficio = calcularPrecioFinal(producto).subtract(calcularCoste(producto));
+
+        return beneficio;
+    }
+
 
     public void exportSummary(String path, String fileXml) throws JAXBException, IOException {
         //TODO: Implementar
