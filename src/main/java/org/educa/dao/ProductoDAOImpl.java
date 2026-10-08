@@ -30,15 +30,4 @@ public class ProductoDAOImpl implements ProductoDAO {
             throw new RuntimeException(e);
         }
     }
-
-    @Override
-    public void writeFile(SummaryEntity summaryEntity, File file) throws IOException {
-        if (!file.exists()) {
-            file.createNewFile();
-        }
-        try (BufferedWriter escritor = new BufferedWriter(new FileWriter(file))) {
-            escritor.write(summaryEntity.toPrint());
-            escritor.flush();
-        }
-    }
 }
