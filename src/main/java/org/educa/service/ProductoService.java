@@ -50,6 +50,12 @@ public class ProductoService {
         return precioFinal;
     }
 
+    private BigDecimal calcularCoste(Producto producto){
+        BigDecimal coste = producto.getCostes().getCostesEnvio().add(producto.getCostes().getCostesAlmacenaje());
+        return coste;
+    }
+
+
 
     public void exportSummary(String path, String fileXml) throws JAXBException, IOException {
         //TODO: Implementar
