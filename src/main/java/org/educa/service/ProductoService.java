@@ -18,9 +18,6 @@ import java.util.List;
 public class ProductoService {
     private final ProductoDAO productoDAO = new ProductoDAOImpl();
 
-    private final ProductoDAO productoDAO = new ProductoDAOImpl();
-
-
     /***
      * (RETOCAR) Reads an XML File using JAXB.
      *
@@ -30,7 +27,7 @@ public class ProductoService {
      */
     public List<ProductoEntity> readFile(String fileXml) throws JAXBException {
 
-        Productos productos = productoDAO.readFile(fileXml);
+        Productos productos = productoDAO.getProductos(fileXml);
 
         List<Producto> listaProductos = productos.getProducto();
         List<ProductoEntity> resultado = new ArrayList<>();
@@ -47,50 +44,49 @@ public class ProductoService {
 
             resultado.add(productoEntity);
         }
+        return resultado;
     }
 
     private BigDecimal calcularPrecioFinal(Producto producto){
-        BigDecimal precioFinal = producto.getPrecio()
+
+        return producto.getPrecio()
                 .subtract(producto.getPrecio()
                         .multiply(producto.getDescuento()
                                 .divide(new BigDecimal(100))));
-
-        return precioFinal;
     }
 
     private BigDecimal calcularCoste(Producto producto){
-        BigDecimal coste = producto.getCostes().getCostesEnvio().add(producto.getCostes().getCostesAlmacenaje());
-        return coste;
+        return producto.getCostes().getCostesEnvio().add(producto.getCostes().getCostesAlmacenaje());
     }
 
     private BigDecimal calcularBeneficio(Producto producto){
-        BigDecimal beneficio = calcularPrecioFinal(producto).subtract(calcularCoste(producto));
 
-        return beneficio;
+        return calcularPrecioFinal(producto).subtract(calcularCoste(producto));
     }
 
-
     public void exportSummary(String path, String fileXml) throws JAXBException, IOException {
-        File xmlFile = new File(fileXml);
         ArrayList<Producto> listaProductos = new ArrayList<>(productoDAO.getProductos(fileXml).getProducto());
-        SummaryEntity summaryEntity = new SummaryEntity();
-        BigDecimal bigCosteTotal = BigDecimal.valueOf(0);
-        BigDecimal bigPrecioFinal = BigDecimal.valueOf(0);
-        double costeTotal = 0;
-        double precioFinal = 0;
+        double beneficioTotal = 0;
         for (Producto producto : listaProductos) {
-            costeTotal += (bigCosteTotal.add(producto.getCostes().getCostesEnvio().add(producto.getCostes().getCostesAlmacenaje()))).doubleValue();
-            precioFinal += (bigPrecioFinal.add(producto.getPrecio())).doubleValue();
+            beneficioTotal += calcularBeneficio(producto).doubleValue();
         }
+        SummaryEntity summaryEntity = summmaryEntMaker(fileXml, beneficioTotal, listaProductos.size());
+        // El primer año de este grado será el primero y el final que concatene Strings con '+' en java - Enrique
+        productoDAO.writeFile(summaryEntity, new File(String.valueOf(new StringBuilder().append(path).append("result_junio2026.txt"))));
+    }
+
+    private SummaryEntity summmaryEntMaker(String fileXml, double beneficio, int numProductos) {
+        File xmlFile = new File(fileXml);
         StringBuilder dateAndNameBuilder = new StringBuilder();
+        SummaryEntity summaryEntity = new SummaryEntity();
         dateAndNameBuilder.append(dateMaker(fileXml));
         summaryEntity.setName(String.valueOf(dateAndNameBuilder));
-        summaryEntity.setNumberOfProducts(listaProductos.size());
-        summaryEntity.setTotalProfit(BigDecimal.valueOf(precioFinal - costeTotal));
+        summaryEntity.setNumberOfProducts(numProductos);
+        summaryEntity.setTotalProfit(BigDecimal.valueOf(beneficio));
         summaryEntity.setFileAbsolutePath(xmlFile.getAbsolutePath());
         summaryEntity.setFileName(String.valueOf(dateAndNameBuilder.insert(0, "result_")));
         summaryEntity.setFileSize(xmlFile.length());
-        productoDAO.writeFile(summaryEntity, new File(String.valueOf(dateAndNameBuilder.insert(0, path).append(".txt"))));
+        return summaryEntity;
     }
 
     private String dateMaker(String fileXml) {
@@ -104,7 +100,4 @@ public class ProductoService {
         return String.valueOf(fechaBuilder);
     }
 
-    public void exportExcel(String path, String fileXml) throws JAXBException, IOException, ParseException {
-        //TODO: Implementar
-    }
 }
