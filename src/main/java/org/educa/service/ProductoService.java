@@ -100,4 +100,10 @@ public class ProductoService {
         return String.valueOf(fechaBuilder);
     }
 
+    public void exportExcel(String path, String fileXml) throws JAXBException, IOException, ParseException {
+
+
+    }
+
+
 }
