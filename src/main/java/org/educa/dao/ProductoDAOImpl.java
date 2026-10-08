@@ -61,6 +61,9 @@ public class ProductoDAOImpl implements ProductoDAO {
             writeHeaderRow(workbook, sheet, boldFont);
             writeProductRows(workbook, sheet, productos);
 
+            for (int i = 0; i < EXCEL_HEADERS.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
 
             workbook.write(out);
 
