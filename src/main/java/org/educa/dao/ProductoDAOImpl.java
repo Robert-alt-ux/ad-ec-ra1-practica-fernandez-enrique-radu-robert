@@ -1,5 +1,6 @@
 package org.educa.dao;
 
+import generated.Producto;
 import generated.Productos;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -58,6 +59,7 @@ public class ProductoDAOImpl implements ProductoDAO {
             Font normalFont = workbook.createFont();
 
             writeHeaderRow(workbook, sheet, boldFont);
+            writeProductRows(sheet, productos);
 
 
             workbook.write(out);
@@ -85,6 +87,26 @@ public class ProductoDAOImpl implements ProductoDAO {
         style.setVerticalAlignment(VerticalAlignment.CENTER);
 
         return style;
+    }
+
+    private void writeProductRows(Sheet sheet, List<ProductoEntity> productos) {
+
+        for (int i = 0; i < productos.size(); i++) {
+
+            ProductoEntity entity = productos.get(i);
+            Producto producto = entity.getProducto();
+
+            Row row = sheet.createRow(i + 1);
+
+            row.createCell(0).setCellValue(producto.getCodigo());
+            row.createCell(1).setCellValue(producto.getNumeroSerie());
+            row.createCell(2).setCellValue(producto.getPrecio().doubleValue());
+            row.createCell(3).setCellValue(producto.getDescuento().doubleValue());
+            row.createCell(4).setCellValue(entity.getPrecioFinal().doubleValue());
+            row.createCell(5).setCellValue(producto.getCostes().getCostesEnvio().doubleValue());
+            row.createCell(6).setCellValue(producto.getCostes().getCostesAlmacenaje().doubleValue());
+            row.createCell(7).setCellValue(entity.getProfit().doubleValue());
+        }
     }
 
 
