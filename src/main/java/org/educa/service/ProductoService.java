@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoService {
-    private final ProductoDAO =new
 
-    ProductoDAOImpl();
+    private final ProductoDAO productoDAO = new ProductoDAOImpl();
+
 
     /***
      * (RETOCAR) Reads an XML File using JAXB.
@@ -21,9 +21,26 @@ public class ProductoService {
      * @throws JAXBException
      */
     public List<ProductoEntity> readFile(String fileXml) throws JAXBException {
-        List<ProductoEntity> listaProductos = new ArrayList<>();
-        return ProductoDAO.getProductos(fileXml);
+
+        Productos productos = productoDAO.readFile(fileXml);
+
+        List<Producto> listaProductos = productos.getProducto();
+        List<ProductoEntity> resultado = new ArrayList<>();
+
+        for (Producto p : listaProductos) {
+
+            ProductoEntity productoEntity = new ProductoEntity();
+
+            productoEntity.setProducto(p);
+            productoEntity.setPrecioFinal(calcularPrecioFinal(p));
+            productoEntity.setCost(calcularCoste(p));
+            productoEntity.setProfit(calcularBeneficio(p));
+
+
+            resultado.add(productoEntity);
+        }
     }
+
 
     public void exportSummary(String path, String fileXml) throws JAXBException, IOException {
         //TODO: Implementar
