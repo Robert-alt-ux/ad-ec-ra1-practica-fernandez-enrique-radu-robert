@@ -53,7 +53,16 @@ public class ProductoDAOImpl implements ProductoDAO {
 
             Sheet sheet = workbook.createSheet(SHEET_NAME);
 
+            Font boldFont = workbook.createFont();
+            boldFont.setBold(true);
+            Font normalFont = workbook.createFont();
+
+            writeHeaderRow(workbook, sheet, boldFont);
+
+
             workbook.write(out);
+
+
         }
 
     }
