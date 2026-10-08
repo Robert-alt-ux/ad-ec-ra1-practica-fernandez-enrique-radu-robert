@@ -101,20 +101,37 @@ public class ProductoDAOImpl implements ProductoDAO {
 
             Row row = sheet.createRow(i + 1);
 
-            CellStyle style = createProductStyle(workbook, i % 2 != 0);
+            CellStyle rowStyle = createProductStyle(workbook, i % 2 != 0);
+
+            CellStyle moneyStyle = createNumberStyle(workbook, rowStyle, FORMAT_MONEY);
+            CellStyle percentStyle = createNumberStyle(workbook, rowStyle, FORMAT_PERCENT);
 
             row.createCell(0).setCellValue(producto.getCodigo());
             row.createCell(1).setCellValue(producto.getNumeroSerie());
-            row.createCell(2).setCellValue(producto.getPrecio().doubleValue());
-            row.createCell(3).setCellValue(producto.getDescuento().doubleValue());
-            row.createCell(4).setCellValue(entity.getPrecioFinal().doubleValue());
-            row.createCell(5).setCellValue(producto.getCostes().getCostesEnvio().doubleValue());
-            row.createCell(6).setCellValue(producto.getCostes().getCostesAlmacenaje().doubleValue());
-            row.createCell(7).setCellValue(entity.getProfit().doubleValue());
 
-            for (int j = 0; j < 8; j++) {
-                row.getCell(j).setCellStyle(style);
-            }
+            createNumberCell(row, 2,
+                    producto.getPrecio().doubleValue(),
+                    moneyStyle);
+
+            createNumberCell(row, 3,
+                    producto.getDescuento().movePointLeft(2).doubleValue(),
+                    percentStyle);
+
+            createNumberCell(row, 4,
+                    entity.getPrecioFinal().doubleValue(),
+                    moneyStyle);
+
+            createNumberCell(row, 5,
+                    producto.getCostes().getCostesEnvio().doubleValue(),
+                    moneyStyle);
+
+            createNumberCell(row, 6,
+                    producto.getCostes().getCostesAlmacenaje().doubleValue(),
+                    moneyStyle);
+
+            createNumberCell(row, 7,
+                    entity.getProfit().doubleValue(),
+                    moneyStyle);
         }
     }
 
@@ -132,6 +149,21 @@ public class ProductoDAOImpl implements ProductoDAO {
         return style;
     }
 
+    private Cell createNumberCell(Row row, int column, double value, CellStyle style) {
+        Cell cell = row.createCell(column);
+        cell.setCellValue(value);
+        cell.setCellStyle(style);
+        return cell;
+    }
+
+    private CellStyle createNumberStyle(XSSFWorkbook workbook, CellStyle baseStyle, String format) {
+        CellStyle style = workbook.createCellStyle();
+
+        style.cloneStyleFrom(baseStyle);
+        style.setDataFormat(workbook.createDataFormat().getFormat(format));
+
+        return style;
+    }
 
 
 }
