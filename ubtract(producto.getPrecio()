@@ -1,0 +1,32 @@
+[33mcommit 04b15cc2ff533bd629d157f1a20632b65064b7b4[m[33m ([m[1;36mHEAD -> [m[1;32mrobert/ej1-service[m[33m)[m
+Author: Robert-Clase <robert.radu6@educa.madrid.org>
+Date:   Thu Oct 8 12:35:54 2026 +0200
+
+    feat(service): implementar metodo readFile
+
+[33mcommit fac9091418d1fc28352b6cd9ed9cf9907f7c7de2[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Merge: 6f18885 54a501d
+Author: Robert-alt-ux <robert.radu6@educa.madrid.org>
+Date:   Mon Oct 5 21:44:54 2026 +0200
+
+    Merge pull request #1 from Robert-alt-ux/enrique
+    
+    Arregladas dependencias del pom.xml
+
+[33mcommit 54a501d3f629e0ba284c1579477a8b2e66218fcb[m
+Author: Enrique <enrique.fernandez34@educa.madrid.org>
+Date:   Mon Oct 5 18:21:57 2026 +0000
+
+    Método readFile() implementado, javadoc a retocar
+
+[33mcommit 986a87158bf3f6f25d58d7720864eca58309cf08[m
+Author: Enrique <enrique.fernandez34@educa.madrid.org>
+Date:   Mon Oct 5 17:23:29 2026 +0000
+
+    Arregladas dependencias del pom.xml
+
+[33mcommit 6f188854f3e6d96d5ff45ab9aa09a929ea4cd310[m
+Author: Robert-Clase <robert.radu6@educa.madrid.org>
+Date:   Tue Sep 29 12:40:02 2026 +0200
+
+    first commit
