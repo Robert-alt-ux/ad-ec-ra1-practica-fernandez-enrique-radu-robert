@@ -59,7 +59,7 @@ public class ProductoDAOImpl implements ProductoDAO {
             Font normalFont = workbook.createFont();
 
             writeHeaderRow(workbook, sheet, boldFont);
-            writeProductRows(sheet, productos);
+            writeProductRows(workbook, sheet, productos);
 
 
             workbook.write(out);
@@ -91,7 +91,8 @@ public class ProductoDAOImpl implements ProductoDAO {
         return style;
     }
 
-    private void writeProductRows(Sheet sheet, List<ProductoEntity> productos) {
+    private void writeProductRows(XSSFWorkbook workbook, Sheet sheet,
+                                  List<ProductoEntity> productos) {
 
         for (int i = 0; i < productos.size(); i++) {
 
@@ -99,6 +100,8 @@ public class ProductoDAOImpl implements ProductoDAO {
             Producto producto = entity.getProducto();
 
             Row row = sheet.createRow(i + 1);
+
+            CellStyle style = createProductStyle(workbook, i % 2 != 0);
 
             row.createCell(0).setCellValue(producto.getCodigo());
             row.createCell(1).setCellValue(producto.getNumeroSerie());
@@ -108,7 +111,25 @@ public class ProductoDAOImpl implements ProductoDAO {
             row.createCell(5).setCellValue(producto.getCostes().getCostesEnvio().doubleValue());
             row.createCell(6).setCellValue(producto.getCostes().getCostesAlmacenaje().doubleValue());
             row.createCell(7).setCellValue(entity.getProfit().doubleValue());
+
+            for (int j = 0; j < 8; j++) {
+                row.getCell(j).setCellStyle(style);
+            }
         }
+    }
+
+    private CellStyle createProductStyle(XSSFWorkbook workbook, boolean alternate) {
+        CellStyle style = workbook.createCellStyle();
+
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        if (alternate) {
+            style.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        }
+
+        return style;
     }
 
 
