@@ -100,4 +100,9 @@ public class ProductoService {
         return String.valueOf(fechaBuilder);
     }
 
+    public void exportExcel(String path, String fileXml) throws JAXBException, IOException, ParseException {
+        List<ProductoEntity> productos = readFile(fileXml);
+        File excelFile = new File(path, "export_" + dateMaker(fileXml) + ".xlsx");
+        productoDAO.writeExcel(productos, excelFile);
+    }
 }
