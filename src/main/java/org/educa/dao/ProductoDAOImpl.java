@@ -30,4 +30,11 @@ public class ProductoDAOImpl implements ProductoDAO {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void writeFile(SummaryEntity summaryEntity, File file) throws IOException {
+
+    }
+
+
 }
