@@ -4,6 +4,8 @@ import generated.Productos;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.educa.entity.ProductoEntity;
 import org.educa.entity.SummaryEntity;
 import org.educa.eventHandler.GestorEventos;
@@ -11,10 +13,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
 import javax.xml.validation.SchemaFactory;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 public class ProductoDAOImpl implements ProductoDAO {
@@ -49,10 +48,16 @@ public class ProductoDAOImpl implements ProductoDAO {
     @Override
     public void writeExcel(List<ProductoEntity> productos, File file) throws IOException {
 
+        try (XSSFWorkbook workbook = new XSSFWorkbook();
+             FileOutputStream out = new FileOutputStream(file)) {
 
+            Sheet sheet = workbook.createSheet(SHEET_NAME);
+
+            workbook.write(out);
+        }
 
     }
 
-    
+
 
 }
