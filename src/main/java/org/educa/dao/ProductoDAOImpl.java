@@ -33,7 +33,9 @@ public class ProductoDAOImpl implements ProductoDAO {
 
     @Override
     public void writeFile(SummaryEntity summaryEntity, File file) throws IOException {
-
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(summaryEntity.toPrint());
+        }
     }
 
 
