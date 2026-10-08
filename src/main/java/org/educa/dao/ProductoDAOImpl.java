@@ -48,7 +48,7 @@ public class ProductoDAOImpl implements ProductoDAO {
     /**
      * Creates the file specified by parameter, then it gets written with its SummaryEntity instance's data.
      * @param summaryEntity class the method gets it's info from.
-     * @param file we want to write on.
+     * @param file The file we want to write on.
      * @throws IOException if the file wasn't created nor found.
      */
     @Override
@@ -58,6 +58,15 @@ public class ProductoDAOImpl implements ProductoDAO {
         }
     }
 
+    /**
+     * Creates an XLSX file with the data of the given list of ProductoEntity. It builds a workbook with a single sheet
+     * and delegates the header and the product rows writing to this class's private methods writeHeaderRow() and
+     * writeProductRows(). Once the content is written, it auto-sizes every column to fit its data and dumps the
+     * workbook into the given file.
+     * @param productos List of ProductoEntity whose data is going to be written, one row per element.
+     * @param file The File where the XLSX workbook is going to be created and written.
+     * @throws IOException if the file can't be created or written, or if the workbook fails to be dumped into it.
+     */
     @Override
     public void writeExcel(List<ProductoEntity> productos, File file) throws IOException {
 
@@ -84,6 +93,14 @@ public class ProductoDAOImpl implements ProductoDAO {
 
     }
 
+    /**
+     * Private method that's called from this class's writeExcel() instance. It serves the function of
+     * create the header row (the first row of the sheet) from the EXCEL_HEADERS constant, applying to each cell
+     * the style made by createHeaderStyle().
+     * @param workbook The XSSFWorkbook that's being written, needed to create the header style.
+     * @param sheet The Sheet where the header row is created.
+     * @param boldFont The Font that's going to be applied to the header cells.
+     */
     private void writeHeaderRow(XSSFWorkbook workbook, Sheet sheet, Font boldFont) {
         Row headerRow = sheet.createRow(0);
 
@@ -96,6 +113,14 @@ public class ProductoDAOImpl implements ProductoDAO {
         }
     }
 
+    /**
+     * Private method that's called from this class's writeHeaderRow() instance. It serves the function of
+     * create the CellStyle of the header cells: bold font, centered content (horizontally and vertically)
+     * and thin borders on all four sides.
+     * @param workbook The XSSFWorkbook used to create the CellStyle.
+     * @param boldFont The Font that's set to the style.
+     * @return A CellStyle object which is the header style.
+     */
     private CellStyle createHeaderStyle(XSSFWorkbook workbook, Font boldFont) {
         CellStyle style = workbook.createCellStyle();
 
@@ -111,6 +136,16 @@ public class ProductoDAOImpl implements ProductoDAO {
         return style;
     }
 
+    /**
+     * Private method that's called from this class's writeExcel() instance. It serves the function of
+     * write one row per ProductoEntity of the list, starting right below the header row. Every row contains,
+     * in this order: codigo, numero de serie, precio, descuento (as a percentage), precio final, costes de envio,
+     * costes de almacenaje and profit. Rows with an odd index get an alternate background color, and the numeric
+     * cells get a money or percent format depending on the column.
+     * @param workbook The XSSFWorkbook that's being written, needed to create the cell styles.
+     * @param sheet The Sheet where the rows are created.
+     * @param productos List of ProductoEntity whose data is written into the sheet.
+     */
     private void writeProductRows(XSSFWorkbook workbook, Sheet sheet,
                                   List<ProductoEntity> productos) {
 
@@ -155,6 +190,14 @@ public class ProductoDAOImpl implements ProductoDAO {
         }
     }
 
+     /**
+     * Private method that's called from this class's writeProductRows() instance. It serves the function of
+     * create the base CellStyle of a product row: centered content (horizontally and vertically) and thin borders
+     * on all four sides. If alternate is true, it also applies a solid light green background.
+     * @param workbook The XSSFWorkbook used to create the CellStyle.
+     * @param alternate true if the row must have the alternate background color, false otherwise.
+     * @return A CellStyle object which is the base style of the row.
+     */
     private CellStyle createProductStyle(XSSFWorkbook workbook, boolean alternate) {
         CellStyle style = workbook.createCellStyle();
 
@@ -174,6 +217,15 @@ public class ProductoDAOImpl implements ProductoDAO {
         return style;
     }
 
+    /**
+     * Private method that's called from this class's writeProductRows() instance. It serves the function of
+     * create a cell in the given column of the row, set a numeric value to it and apply the given style.
+     * @param row The Row where the cell is created.
+     * @param column The index of the column where the cell is created.
+     * @param value The double value that's set to the cell.
+     * @param style The CellStyle that's applied to the cell.
+     * @return The Cell that has been created.
+     */
     private Cell createNumberCell(Row row, int column, double value, CellStyle style) {
         Cell cell = row.createCell(column);
         cell.setCellValue(value);
@@ -181,6 +233,15 @@ public class ProductoDAOImpl implements ProductoDAO {
         return cell;
     }
 
+    /**
+     * Private method that's called from this class's writeProductRows() instance. It serves the function of
+     * create a new CellStyle by cloning the given base style and setting to it a data format (money, percent...).
+     * The base style is not modified.
+     * @param workbook The XSSFWorkbook used to create the CellStyle and the DataFormat.
+     * @param baseStyle The CellStyle that's cloned to keep its alignment, borders and background.
+     * @param format The String pattern of the data format that's applied to the new style.
+     * @return A CellStyle object which is the base style plus the given data format.
+     */
     private CellStyle createNumberStyle(XSSFWorkbook workbook, CellStyle baseStyle, String format) {
         CellStyle style = workbook.createCellStyle();
 
