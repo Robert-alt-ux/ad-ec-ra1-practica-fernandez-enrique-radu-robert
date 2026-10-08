@@ -17,34 +17,6 @@ import java.util.List;
 
 public class ProductoService {
     private final ProductoDAO productoDAO = new ProductoDAOImpl();
-    /***
-     * (RETOCAR) Reads an XML File using JAXB.
-     *
-     * @param fileXml
-     * @return List<ProductoEntity>
-     * @throws JAXBException
-     */
-    public List<ProductoEntity> readFile(String fileXml) throws JAXBException {
-        List<ProductoEntity> productoEntityList = new ArrayList<>();
-        Productos productos = productoDAO.getProductos(fileXml);
-        ArrayList<Producto> listaProductos = new ArrayList<>(productos.getProducto());
-        for (Producto producto : listaProductos) {
-            ProductoEntity productoEntity = createProductoEntity(producto);
-            productoEntityList.add(productoEntity);
-        }
-        return productoEntityList;
-    }
-
-    private ProductoEntity createProductoEntity(Producto producto) {
-        ProductoEntity productoEntity = new ProductoEntity();
-        productoEntity.setProducto(producto);
-        BigDecimal precioFinal = (producto.getPrecio().multiply(producto.getDescuento())).divide(BigDecimal.valueOf(100));
-        BigDecimal coste = (producto.getCostes().getCostesAlmacenaje()).add(producto.getCostes().getCostesEnvio());
-        productoEntity.setPrecioFinal(precioFinal);
-        productoEntity.setCost(coste);
-        productoEntity.setProfit(coste.subtract(precioFinal));
-        return productoEntity;
-    }
 
     public void exportSummary(String path, String fileXml) throws JAXBException, IOException {
         File xmlFile = new File(fileXml);
