@@ -72,10 +72,12 @@ public class ProductoDAOImpl implements ProductoDAO {
     private void writeHeaderRow(XSSFWorkbook workbook, Sheet sheet, Font boldFont) {
         Row headerRow = sheet.createRow(0);
 
+        CellStyle headerStyle = createHeaderStyle(workbook, boldFont);
+
         for (int i = 0; i < EXCEL_HEADERS.length; i++) {
             Cell cell = headerRow.createCell(i);
             cell.setCellValue(EXCEL_HEADERS[i]);
-            cell.setCellStyle(createHeaderStyle(workbook, boldFont));
+            cell.setCellStyle(headerStyle);
         }
     }
 
