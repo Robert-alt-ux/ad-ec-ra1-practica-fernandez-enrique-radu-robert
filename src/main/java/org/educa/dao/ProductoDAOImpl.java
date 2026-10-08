@@ -29,7 +29,7 @@ public class ProductoDAOImpl implements ProductoDAO {
      * Unmarshalls a XML file given by parameter. Uses an instance of GestorEventos class as an EventHandler.
      * @param filexml, the file we want to unmarshall.
      * @return An instance of a generated Productos given by JAXB API's call.
-     * @throws Throws JAXBException if something went wrong going trough the XML file.
+     * @throws JAXBException if something went wrong going trough the XML file.
      */
     @Override
     public Productos getProductos(String filexml) throws JAXBException {
@@ -47,9 +47,9 @@ public class ProductoDAOImpl implements ProductoDAO {
 
     /**
      * Creates the file specified by parameter, then it gets written with its SummaryEntity instance's data.
-     * @param An instance of a SummaryEntity class the method gets it's info from.
-     * @param The file we want to write on.
-     * @throws Throws an IOException if the file wasn't created nor found.
+     * @param summaryEntity class the method gets it's info from.
+     * @param file we want to write on.
+     * @throws IOException if the file wasn't created nor found.
      */
     @Override
     public void writeFile(SummaryEntity summaryEntity, File file) throws IOException {
