@@ -55,6 +55,11 @@ public class ProductoService {
         return coste;
     }
 
+    private BigDecimal calcularBeneficio(Producto producto){
+        BigDecimal beneficio = calcularPrecioFinal(producto).subtract(calcularCoste(producto));
+
+        return beneficio;
+    }
 
 
     public void exportSummary(String path, String fileXml) throws JAXBException, IOException {
