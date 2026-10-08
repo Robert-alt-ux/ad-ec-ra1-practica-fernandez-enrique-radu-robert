@@ -11,4 +11,5 @@ public interface ProductoDAO {
     Productos getProductos(String fileXml) throws JAXBException;
 
     void writeFile(SummaryEntity summaryEntity, File file) throws IOException;
+
 }
