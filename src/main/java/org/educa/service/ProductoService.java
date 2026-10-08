@@ -41,6 +41,15 @@ public class ProductoService {
         }
     }
 
+    private BigDecimal calcularPrecioFinal(Producto producto){
+        BigDecimal precioFinal = producto.getPrecio()
+                .subtract(producto.getPrecio()
+                        .multiply(producto.getDescuento()
+                                .divide(new BigDecimal(100))));
+
+        return precioFinal;
+    }
+
 
     public void exportSummary(String path, String fileXml) throws JAXBException, IOException {
         //TODO: Implementar
