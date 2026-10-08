@@ -19,6 +19,12 @@ import java.util.List;
 
 public class ProductoDAOImpl implements ProductoDAO {
 
+    private static final String SHEET_NAME = "Inventario";
+    private static final String[] EXCEL_HEADERS = {"Codigo", "Número de Serie", "Precio", "Descuento",
+            "Precio Final", "Costes Envío", "Costes Almacenaje", "Beneficio"};
+    private static final String FORMAT_MONEY = "#,##0.00 \"€\"";
+    private static final String FORMAT_PERCENT = "0.00%";
+
     @Override
     public Productos getProductos(String filexml) throws JAXBException {
         try {
@@ -42,8 +48,11 @@ public class ProductoDAOImpl implements ProductoDAO {
 
     @Override
     public void writeExcel(List<ProductoEntity> productos, File file) throws IOException {
-        
+
+
+
     }
 
+    
 
 }
