@@ -4,6 +4,7 @@ import generated.Productos;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
+import org.educa.entity.ProductoEntity;
 import org.educa.entity.SummaryEntity;
 import org.educa.eventHandler.GestorEventos;
 import org.xml.sax.SAXException;
@@ -14,6 +15,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 public class ProductoDAOImpl implements ProductoDAO {
 
@@ -38,7 +40,10 @@ public class ProductoDAOImpl implements ProductoDAO {
         }
     }
 
-
+    @Override
+    public void writeExcel(List<ProductoEntity> productos, File file) throws IOException {
+        
+    }
 
 
 }
