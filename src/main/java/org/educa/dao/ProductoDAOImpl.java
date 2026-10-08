@@ -4,7 +4,7 @@ import generated.Productos;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.educa.entity.ProductoEntity;
 import org.educa.entity.SummaryEntity;
@@ -56,6 +56,26 @@ public class ProductoDAOImpl implements ProductoDAO {
             workbook.write(out);
         }
 
+    }
+
+    private void writeHeaderRow(XSSFWorkbook workbook, Sheet sheet, Font boldFont) {
+        Row headerRow = sheet.createRow(0);
+
+        for (int i = 0; i < EXCEL_HEADERS.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(EXCEL_HEADERS[i]);
+            cell.setCellStyle(createHeaderStyle(workbook, boldFont));
+        }
+    }
+
+    private CellStyle createHeaderStyle(XSSFWorkbook workbook, Font boldFont) {
+        CellStyle style = workbook.createCellStyle();
+
+        style.setFont(boldFont);
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        return style;
     }
 
 
